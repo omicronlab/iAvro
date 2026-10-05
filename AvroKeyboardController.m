@@ -22,7 +22,6 @@
     self = [super initWithServer:server delegate:delegate client:inputClient];
     
 	if (self) {
-        _currentClient = inputClient;
         _composedBuffer = [[NSMutableString alloc] initWithString:@""];
         _currentCandidates = [[NSMutableArray alloc] initWithCapacity:0];
         _prevSelected = -1;
@@ -130,7 +129,7 @@
 }
 
 - (void)candidateSelected:(NSAttributedString*)candidateString {
-    [_currentClient insertText:candidateString replacementRange:NSMakeRange(NSNotFound, 0)];
+    [[self client] insertText:candidateString replacementRange:NSMakeRange(NSNotFound, 0)];
 	
 	[self clearCompositionBuffer];
 	[_currentCandidates removeAllObjects];
@@ -151,6 +150,18 @@
 
 - (void)clearCompositionBuffer {
 	[_composedBuffer deleteCharactersInRange:NSMakeRange(0, [_composedBuffer length])];	
+}
+
+- (NSAttributedString*)candidateForCommit {
+    NSAttributedString* candidate = [[Candidates sharedInstance] selectedCandidateString];
+    if (!candidate && [_currentCandidates count] > 0) {
+        NSUInteger index = 0;
+        if (_prevSelected >= 0 && (NSUInteger)_prevSelected < [_currentCandidates count]) {
+            index = (NSUInteger)_prevSelected;
+        }
+        candidate = [[[NSAttributedString alloc] initWithString:[_currentCandidates objectAtIndex:index]] autorelease];
+    }
+    return candidate;
 }
 
 /*
@@ -181,7 +192,7 @@
     // Returning NO means the original key down will be passed on to the client.
     if ([string isEqualToString:@" "]) {
         if (_currentCandidates && [_currentCandidates count]) {
-            [self candidateSelected:[[Candidates sharedInstance] selectedCandidateString]];
+            [self candidateSelected:[self candidateForCommit]];
         }
         return NO;
     }
@@ -237,9 +248,9 @@
 }
 
 - (void)commitText:(NSString*)string {
-    if (_currentCandidates) {
-        [self candidateSelected:[[Candidates sharedInstance] selectedCandidateString]];
-        [_currentClient insertText:string replacementRange:NSMakeRange(NSNotFound, 0)];
+    if ([_currentCandidates count] > 0) {
+        [self candidateSelected:[self candidateForCommit]];
+        [[self client] insertText:string replacementRange:NSMakeRange(NSNotFound, 0)];
     }
     else {
         NSBeep();

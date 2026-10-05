@@ -1,0 +1,62 @@
+[
+  {
+    "input": "",
+    "output": ""
+  },
+  {
+    "input": "ami",
+    "output": "আমি"
+  },
+  {
+    "input": "bangla",
+    "output": "বাংলা"
+  },
+  {
+    "input": "bangladesh",
+    "output": "বাংলাদেশ"
+  },
+  {
+    "input": "Dhaka",
+    "output": "ঢাকা"
+  },
+  {
+    "input": "bhalo",
+    "output": "ভাল"
+  },
+  {
+    "input": "kSh",
+    "output": "ক্ষ"
+  },
+  {
+    "input": "rri",
+    "output": "ঋ"
+  },
+  {
+    "input": "123.45",
+    "output": "১২৩।৪৫"
+  },
+  {
+    "input": "12:30",
+    "output": "১২ঃ৩০"
+  },
+  {
+    "input": "ami, bangla.",
+    "output": "আমি, বাংলা।"
+  },
+  {
+    "input": "ami\nbangla",
+    "output": "আমি\nবাংলা"
+  },
+  {
+    "input": "বাংলা 🙂",
+    "output": "বাংলা 🙂"
+  },
+  {
+    "input": "o`",
+    "output": ""
+  },
+  {
+    "input": "aZ",
+    "output": "অ্যা"
+  }
+]

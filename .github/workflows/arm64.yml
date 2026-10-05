@@ -1,0 +1,35 @@
+name: Native arm64 checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    # Verified against the official runner inventory on 2026-10-05.
+    # This is ARM64 macOS 26; it does not establish macOS 27 IMK compatibility.
+    runs-on: macos-26
+    timeout-minutes: 20
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and run isolated checks
+        run: ./scripts/check.sh "$RUNNER_TEMP/iavro-validation" Debug
+      - name: Retain diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: arm64-validation-logs
+          path: |
+            ${{ runner.temp }}/iavro-validation/*.log
+            ${{ runner.temp }}/iavro-validation/*.command
+            ${{ runner.temp }}/iavro-validation/*.exit
+            ${{ runner.temp }}/iavro-validation/dependencies.txt
+          if-no-files-found: warn
+          retention-days: 7

@@ -1,6 +1,8 @@
 .*
 !.gitignore
 !.gitattributes
+!.github/
+!.github/**
 
 # User specific settings folder
 AvroKeyboard.xcodeproj/xcuserdata/
